@@ -1,0 +1,45 @@
+.contact-form-container {
+  background-color: #1e2c6c; /* Azul oscuro para el fondo del formulario */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  max-width: 600px; /* Ancho máximo del formulario */
+  margin: 20px auto; /* Centrar el formulario */
+}
+
+.contact-form-container h4 {
+  color: #e5c55a; /* Color dorado para el título */
+  margin-bottom: 16px;
+}
+
+.contact-form-container label {
+  margin: 8px 0 4px;
+  font-weight: 600;
+  color: #ffffff; /* Color blanco para las etiquetas */
+}
+
+.contact-form-container input,
+.contact-form-container textarea {
+  padding: 10px;
+  border: 1px solid #c4a35a; /* Borde dorado */
+  border-radius: 8px;
+  margin-bottom: 16px;
+  background-color: #2a3a8a; /* Azul más claro para los campos */
+  color: #ffffff; /* Texto blanco para los campos */
+  width: 100%; /* Ancho completo */
+}
+
+.contact-form-container button {
+  background-color: #c4a35a; /* Color dorado para el botón */
+  color: #273979; /* Texto en azul oscuro para el botón */
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 100%; /* Ancho completo */
+}
+
+.contact-form-container button:hover {
+  background-color: #e5c55a; /* Color del botón al pasar el mouse */
+}

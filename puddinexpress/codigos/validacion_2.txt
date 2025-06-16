@@ -1,0 +1,30 @@
+
+<script type="text/javascript">
+$(document).ready(function(){
+        let formatoemail = /^[a-zA-Z0-9_\.\-]+@[a-zA-Z0-9\-]+\.[a-zA-Z0-9\-\.]+$/;
+        let formatowhatsapp = /^\d{10}$/;
+
+        $('#enviar').click(function(){
+           
+            if ($('#nombre').val() == "") {
+               toastr.warning("Debes de Ingresar un Nombre","Contactos");
+               return false;
+            } else if ($("#email").val() == "" || !formatoemail.test($("#email").val())) {
+               toastr["warning"]("El Formato del Email es incorrecto, utilice un correo válido","Contactos");
+               return false; 
+            } else if ($("#whatsapp").val() == "" || !formatowhatsapp.test($("#whatsapp").val())) {
+           toastr["warning"]("Debes de Ingresar un Número de Whatsapp válido (10 dígitos)","Contactos");
+           return false;
+            } else if ($("#password").val() == "") {
+               toastr["warning"]("Debes de Ingresar un Password","Contactos");
+               return false;
+            } else if ($("#confirmar").val() !== $("#password").val() || "") {
+               toastr["warning"]("Las Contraseñas no Coinciden <br/>Por favor Confirmar tu Contraseña","Contactos");
+               return false;
+            }
+        toastr.options = { 
+            timeOut: 2000  
+        };
+    });
+   });
+</script>
