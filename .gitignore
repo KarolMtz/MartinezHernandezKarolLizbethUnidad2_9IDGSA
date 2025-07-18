@@ -1,0 +1,14 @@
+# Composer dependencies
+/vendor/
+
+# Entornos de desarrollo
+.env
+.env.local
+
+# Archivos temporales
+*.log
+*.cache
+
+# Directorios del sistema
+.DS_Store
+Thumbs.db

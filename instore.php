@@ -1,3 +1,8 @@
+<?php
+session_start();
+require_once('db_conexion.php');
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -15,26 +20,40 @@
 </head>
 
 <body>
-    <header>
-        <div class="nav-container container" role="navigation" aria-label="Main navigation">
-            <button aria-label="Abrir menú" aria-expanded="false" aria-controls="mobile-menu"
-                class="hamburger-btn material-icons" id="hamburger-btn">
-                menu
-            </button>
-            <div class="logo" aria-label="1004 Cake Boutique">
-                1004<span>Cake Boutique</span>
-            </div>
-            <nav class="desktop-nav" aria-label="Navegación principal">
-                <a href="index.php" tabindex="0">Home</a>
-                <a href="instore.php" tabindex="0">In Store</a>
-                <a href="register.php" tabindex="0">Register</a>
-                <a href="login.php" tabindex="0">Login</a>
-                <a href="contact.php" tabindex="0">Contact</a>
-            </nav>
+  <header>
+    <div class="nav-container container" role="navigation" aria-label="Main navigation">
+      <button aria-label="Abrir menú" aria-expanded="false" aria-controls="mobile-menu"
+        class="hamburger-btn material-icons" id="hamburger-btn">
+        menu
+      </button>
+      <div class="logo" aria-label="1004 Cake Boutique">
+      <a href="index.php"><img src="img/toram.png" alt="" width="70" height="70">
+        1004<span>Cake Boutique</span>
+      </div></a>
+      <nav class="desktop-nav" aria-label="Navegación principal">
+        <a href="instore.php" tabindex="0">In Store</a>
+        <?php if (!isset($_SESSION['user_logged_in']) || $_SESSION['user_logged_in'] !== true): ?>
+          <a href="register.php" tabindex="0">Register</a>
+          <a href="login.php" tabindex="0">Login</a>
+        <?php else: ?>
+          <a href="logout.php" tabindex="0">Logout</a> <!-- Logout link -->
+        <?php endif; ?>
+        <a href="contact.php" tabindex="0">Contact</a>
+        <a href="pedido.php" tabindex="0">Order</a>
+      </nav>
+    </div>
 
-            <button class="btn-order" tabindex="0"><a href="pedido.php">Order</a></button>
-        </div>
-    </header>
+    <nav id="mobile-menu" class="mobile-nav" aria-label="Menú móvil">
+      <a href="instore.php" tabindex="-1">In Store</a>
+      <?php if (!isset($_SESSION['user_logged_in']) || $_SESSION['user_logged_in'] !== true): ?>
+        <a href="register.php" tabindex="-1">Register</a>
+        <a href="login.php" tabindex="-1">Login</a>
+      <?php else: ?>
+        <a href="logout.php" tabindex="-1">Logout</a> <!-- Logout link -->
+      <?php endif; ?>
+      <a href="contact.php" tabindex="-1">Contact</a>
+    </nav>
+  </header>
 
     <main>
         <!-- Carousel Section -->
@@ -45,22 +64,19 @@
             <div class="carousel-track" aria-live="polite" aria-atomic="true">
                 <!-- Carousel cards -->
                 <div class="carousel-card">
-                    <img src="https://placehold.co/300x300/png?text=Salted+Caramel"
-                        alt="Pastel Salted Caramel en plato azul con diseño delicado" />
+                    <img src="img/burnt.jpg" alt="Pastel Salted Caramel en plato azul con diseño delicado" />
                     <div class="carousel-caption">Salted Caramel</div>
                 </div>
                 <div class="carousel-card">
-                    <img src="https://placehold.co/300x300/png?text=Baked+Chocolate"
-                        alt="Pastel Baked Chocolate con glaseado de chocolate y polvo" />
+                    <img src="img/pistache.jpg" alt="Pastel Baked Chocolate con glaseado de chocolate y polvo" />
                     <div class="carousel-caption">Baked Chocolate</div>
                 </div>
                 <div class="carousel-card">
-                    <img src="https://placehold.co/300x300/png?text=Chocolate+Flourless"
-                        alt="Pastel de chocolate sin harina con ganache y arándanos frescos" />
+                    <img src="img/frutas.jpg" alt="Pastel de chocolate sin harina con ganache y arándanos frescos" />
                     <div class="carousel-caption">Chocolate Flourless w/ Choc Ganache &amp; Blueberries</div>
                 </div>
                 <div class="carousel-card">
-                    <img src="https://placehold.co/300x300/png?text=Triple+Chocolate"
+                    <img src="img/donut.jpg"
                         alt="Pastel Triple Chocolate con glaseado espejo y detalles de frutos rojos" />
                     <div class="carousel-caption">Triple Chocolate</div>
                 </div>
@@ -159,47 +175,40 @@
   <footer>
     <div class="footer-container container">
       <div class="footer-column" aria-label="Logo panadería">
-        <img
-          src="img/Tarta artesanal.jpg"
-          alt="Logo blanco y dorado de 1004 Cake Boutique con dibujo de edificio" class="footer-logo"
-          tabindex="0" />
+        <img src="img/cake.png" alt="Logo blanco y dorado de 1004 Cake Boutique con dibujo de edificio"
+          class="footer-logo" tabindex="0" />
       </div>
       <div class="footer-column" aria-label="Contacto">
         <h4>Get in Touch</h4>
         <form method="POST">
           <div class="header">Nuevo mensaje de cliente</div>
-          <div class="content">
+          <fieldset>
+            <legend>Contact Information</legend>
             <label for="nombre">Nombre:</label>
-            <input type="text" id="name" name="nombre" required />
+            <input type="text" id="nombre" name="nombre" required />
 
             <label for="email">Correo:</label>
             <input type="email" id="email" name="email" required />
-            <br>
+
             <label for="asunto">Asunto:</label>
             <input type="text" id="asunto" name="asunto" required />
 
             <label for="mensaje">Mensaje:</label>
             <textarea id="mensaje" name="mensaje" required></textarea>
-          </div>
-          <button id="contacto" type="button">Enviar</button>
+          </fieldset>
+
+          <button id="contacto" type="submit">Enviar</button>
         </form>
+
 
         <a href="tel:+123456789" tabindex="0" aria-label="Llamar a la panadería">Ph: +1 234 567 89</a>
         <a href="mailto:1004shuahae@gmail.com" tabindex="0" aria-label="Correo electrónico">Email:
           1004suahae@gmail.com</a>
       </div>
-      <div class="footer-column" aria-label="Visítanos">
-        <h4>Visit Us</h4>
-        <address>
-          38 New Canterbury Road Petersham 2049<br />
-          <a href="https://maps.google.com/?q=38 New Canterbury Road Petersham 2049" tabindex="0"
-            aria-label="Abrir mapa con dirección">Get Directions</a>
-        </address>
+      <div class="footer-column" aria-label="Sitemap">
+        <h4>Sitemap</h4>
+        <p><a href="sitemap.php" tabindex="0" aria-label="Ver el sitemap">View Sitemap</a></p>
       </div>
-        <div class="footer-column" aria-label="Sitemap">
-            <h4>Sitemap</h4>
-            <p><a href="sitemap.php" tabindex="0" aria-label="Ver el sitemap">View Sitemap</a></p>
-        </div>
       <div class="footer-column" aria-label="Horario">
         <h4>Opening Hours</h4>
         <p>Monday to Saturday: 8:30am - 5pm</p>
@@ -207,11 +216,10 @@
       </div>
     </div>
   </footer>
-  
-  <script src="js/contact.js"></script>
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="js/contact.js"></script>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
     <!-- Script de Chatbase -->
     <script src="js/chatbase.js"></script>

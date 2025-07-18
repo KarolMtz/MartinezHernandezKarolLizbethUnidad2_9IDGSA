@@ -8,19 +8,28 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 if (isset($_POST['recuperar'])) {
-    $email = $_POST['email'];
+    $email = trim($_POST['email'] ?? '');
+
+    // Input validation
+    if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        echo "<script>alert('Correo electrónico inválido.'); window.location= 'recuperar.php';</script>";
+        exit();
+    }
+
     $query = $cnnPDO->prepare('SELECT * FROM register WHERE email=:email');
     $query->bindParam(':email', $email);
     $query->execute();
     $campo = $query->fetch();
 
     if ($campo) {
-        // Generar un código de recuperación
-        $codigoRecuperacion = bin2hex(random_bytes(16)); // Genera un código aleatorio
+        // Generar un token de recuperación y fecha de expiración (1 hora)
+        $codigoRecuperacion = bin2hex(random_bytes(16));
+        $expiration = date('Y-m-d H:i:s', time() + 3600);
 
-        // Guardar el código en la base de datos
-        $updateQuery = $cnnPDO->prepare('UPDATE register SET recovery_code=:codigo WHERE email=:email');
+        // Guardar el token y la expiración en la base de datos
+        $updateQuery = $cnnPDO->prepare('UPDATE register SET recovery_code=:codigo, recovery_expiration=:expiration WHERE email=:email');
         $updateQuery->bindParam(':codigo', $codigoRecuperacion);
+        $updateQuery->bindParam(':expiration', $expiration);
         $updateQuery->bindParam(':email', $email);
         $updateQuery->execute();
 
@@ -31,26 +40,27 @@ if (isset($_POST['recuperar'])) {
             $mail->Host = 'smtp.gmail.com';
             $mail->SMTPAuth = true;
             $mail->Username = 'karolpeachzen@gmail.com';
-            $mail->Password = 'ypnh wcek buvl hurp';
+            $mail->Password = 'ypnhwcekbuvlhurp'; // Removed spaces in password
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port = 587;
 
             $mail->setFrom('karolpeachzen@gmail.com', 'Recuperación de Contraseña');
             $mail->addAddress($email);
 
-            // Contenido del correo
+            // Contenido del correo con enlace para restablecer contraseña
+            $resetLink = "http://yourdomain.com/cambiar_pss.php?token=" . urlencode($codigoRecuperacion);
             $mail->isHTML(true);
             $mail->Subject = 'Recuperación de contraseña';
-            $mail->Body = 'Tu código de recuperación es: ' . $codigoRecuperacion;
-            $mail->AltBody = 'Tu código de recuperación es: ' . $codigoRecuperacion;
+            $mail->Body = "Haz clic en el siguiente enlace para restablecer tu contraseña: <a href=\"$resetLink\">$resetLink</a>. Este enlace expirará en 1 hora.";
+            $mail->AltBody = "Haz clic en el siguiente enlace para restablecer tu contraseña: $resetLink. Este enlace expirará en 1 hora.";
 
             $mail->send();
 
-            // Redirigir a la página de verificación con el código
-            header('Location: verificar_codigo.php?codigo=' . $codigoRecuperacion);
+            // Redirigir a la página de recuperación con mensaje de éxito
+            header('Location: recuperar.php?codigo_enviado=1');
             exit();
         } catch (Exception $e) {
-            echo "El mensaje no pudo ser enviado. Error de PHPMailer: {$mail->ErrorInfo}";
+            echo "<script>alert('El mensaje no pudo ser enviado. Por favor, inténtalo más tarde.'); window.location= 'recuperar.php';</script>";
         }
     } else {
         echo "<script>alert('Este correo no está registrado.'); window.location= 'recuperar.php';</script>";

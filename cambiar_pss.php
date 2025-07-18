@@ -2,26 +2,65 @@
 session_start();
 require_once('db_conexion.php');
 
-if (isset($_GET['codigo'])) {
-    $codigo = $_GET['codigo'];
-} else {
-    echo "No se proporcionó un código de recuperación.";
+function generateCSRFToken() {
+    if (empty($_SESSION['csrf_token'])) {
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    }
+    return $_SESSION['csrf_token'];
+}
+
+function validateCSRFToken($token) {
+    return isset($_SESSION['csrf_token']) && hash_equals($_SESSION['csrf_token'], $token);
+}
+
+$errors = [];
+
+$token = $_GET['token'] ?? '';
+
+if (empty($token)) {
+    echo "<p>Código de recuperación no proporcionado.</p>";
+    exit();
+}
+
+// Verificar que el token sea válido y no haya expirado
+$query = $cnnPDO->prepare('SELECT * FROM register WHERE recovery_code=:token AND recovery_expiration > NOW()');
+$query->bindParam(':token', $token);
+$query->execute();
+$user = $query->fetch();
+
+if (!$user) {
+    echo "<p>Token inválido o expirado.</p>";
     exit();
 }
 
 if (isset($_POST['nueva_contrasena'])) {
-    $nuevaContrasena = password_hash($_POST['nueva_contrasena'], PASSWORD_DEFAULT); // Asegúrate de hashear la contraseña
+    // Validar CSRF token
+    if (!validateCSRFToken($_POST['csrf_token'] ?? '')) {
+        $errors[] = "Error de validación del formulario.";
+    }
 
-    // Actualizar la contraseña en la base de datos
-    $updateQuery = $cnnPDO->prepare('UPDATE register SET pssword=:nuevaContrasena, recovery_code=NULL WHERE recovery_code=:codigo');
-    $updateQuery->bindParam(':nuevaContrasena', $nuevaContrasena);
-    $updateQuery->bindParam(':codigo', $codigo);
-    $updateQuery->execute();
+    $nuevaContrasena = $_POST['nueva_contrasena'] ?? '';
 
-    // Redirigir a la página de inicio de sesión
-    header('Location: login.php?cambio_exitoso=1');
-    exit();
+    // Validar nueva contraseña
+    if (empty($nuevaContrasena) || strlen($nuevaContrasena) < 8) {
+        $errors[] = "La nueva contraseña debe tener al menos 8 caracteres.";
+    }
+
+    if (empty($errors)) {
+        $hashedPassword = password_hash($nuevaContrasena, PASSWORD_DEFAULT);
+
+        // Actualizar la contraseña y borrar el token
+        $updateQuery = $cnnPDO->prepare('UPDATE register SET pssword=:nuevaContrasena, recovery_code=NULL, recovery_expiration=NULL WHERE recovery_code=:token');
+        $updateQuery->bindParam(':nuevaContrasena', $hashedPassword);
+        $updateQuery->bindParam(':token', $token);
+        $updateQuery->execute();
+
+        header('Location: login.php?cambio_exitoso=1');
+        exit();
+    }
 }
+
+$csrfToken = generateCSRFToken();
 ?>
 
 <!DOCTYPE html>
