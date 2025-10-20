@@ -12,3 +12,26 @@
 # Directorios del sistema
 .DS_Store
 Thumbs.db
+
+
+# ---------------------------------------------
+# archivos de conexión y contraseñas
+# ---------------------------------------------
+db_migration_add_recovery_expiration.sql
+db_migration_add_recovery_expiration_down.sql
+add_role_column.php
+admin_dashboard.php
+auth.php
+cambiar_pss.php
+correo.php
+create_sample_users.php
+db_conexion.php
+login.php
+logout.php
+logout.php
+procesar_cambio.php
+procesar_recuperar.php
+recuperar.php
+register.php
+reset_password.php
+reset_password_process.php
