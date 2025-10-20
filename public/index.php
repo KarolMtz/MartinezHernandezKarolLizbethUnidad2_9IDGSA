@@ -63,7 +63,7 @@ require_once('db_conexion.php');
       </div>
       <div class="scroll-text" aria-hidden="true">SCROLL ↓</div>
       <p class="hero-text" role="region" aria-live="polite">
-        Located in Petersham, we're home to the world’s best Portuguese tarts
+        Locailzados en Saltillo, las mejores tartas artesanales y pasteles portugueses
         <a href="#story" tabindex="0">(according to us).</a>
       </p>
         <nav class="desktop-nav" aria-label="Navegación principal">
