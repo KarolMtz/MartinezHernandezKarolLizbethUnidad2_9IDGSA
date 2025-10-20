@@ -9,7 +9,6 @@ require_once('db_conexion.php');
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Panadería 1004 - Página Principal</title>
   <title>Panadería 1004 - Nuestro Equipo</title>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=FONT_NAME:weights&display=swap" rel="stylesheet" />
@@ -108,51 +107,14 @@ require_once('db_conexion.php');
       <p>Conoce a las personas que hacen posible la magia en 1004 Cake Boutique.</p>
       <div class="team-grid">
         <?php for ($i = 1; $i <= 13; $i++): ?>
-        <div class="team-card">
-          <img src="https://via.placeholder.com/150/1e2c6c/FFFFFF?text=Equipo" alt="Foto del Miembro del Equipo <?php echo $i; ?>">
-          <h3>Miembro <?php echo $i; ?></h3>
-          <p class="role">Puesto del Miembro</p>
-        </div>
+          <div class="team-card">
+            <img src="img/equipo/miembro-<?php echo $i; ?>.jpg" alt="Foto del Miembro del Equipo <?php echo $i; ?>">
+            <h3>Nombre del Miembro <?php echo $i; ?></h3>
+            <p class="role">Puesto del Miembro</p>
+          </div>
         <?php endfor; ?>
       </div>
-      <div class="scroll-text" aria-hidden="true">SCROLL ↓</div>
-      <p class="hero-text" role="region" aria-live="polite">
-        Locailzados en Saltillo, las mejores tartas artesanales y pasteles portugueses
-        <a href="#story" tabindex="0">(according to us).</a>
-      </p>
-        <nav class="desktop-nav" aria-label="Navegación principal">
-          <a href="pedido.php" tabindex="0">Order</a>
-        </nav>
-      </button>
     </section>
-
-    <section class="options-section" role="navigation" aria-label="Opciones de navegación secundarias">
-      <a href="instore.php" class="option" tabindex="0" role="link" aria-label="Ir a In Store">
-        IN STORE
-        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-          <path d="M10 17l5-5-5-5v10z" />
-        </svg>
-      </a>
-      <a href="pagina_error.php" class="option" tabindex="0" role="link" aria-label="Ir a Catering">
-        CATERING
-        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-          <path d="M10 17l5-5-5-5v10z" />
-        </svg>
-      </a>
-      <a href="pedido.php" class="option" tabindex="0" role="link" aria-label="Ir a Order">
-        ORDER
-        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-          <path d="M10 17l5-5-5-5v10z" />
-        </svg>
-      </a>
-    </section>
-
-    <section class="gallery-section" aria-label="Galería de productos">
-      <img src="img/footer.png"
-        alt="Fila de cajas blancas con el logo de 1004 y bandeja con tartas portuguesas calientes" tabindex="0" />
-    </section>
-
-    <div class="tile-decor" aria-hidden="true"></div>
   </main>
 
   <footer>
